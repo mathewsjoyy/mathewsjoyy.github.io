@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Mathews Joy — Graduate at JLR. AI, machine learning, and vision inspection systems."
+    />
+    <title>Mathews Joy</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <main class="hero">
+      <div class="hero__visual" aria-hidden="true">
+        <div class="hero__bg">
+          <img
+            class="hero__photo"
+            src="assets/hero.jpg"
+            alt=""
+            width="1920"
+            height="1080"
+            fetchpriority="high"
+          />
+        </div>
+        <div class="hero__grain"></div>
+        <div class="hero__vignette"></div>
+      </div>
+
+      <div class="hero__content">
+        <header class="hero__intro">
+          <h1 class="hero__name">Mathews Joy</h1>
+          <p class="hero__taglines">
+            Graduate at JLR<br />
+            Automotive · AI / ML<br />
+            Vision inspection systems
+          </p>
+        </header>
+
+        <div class="hero__bio">
+          <p>
+            I work where production meets perception: building and evaluating
+            machine learning pipelines for vision inspection—translating noisy
+            camera data into reliable decisions on the line, and iterating with
+            engineers so models hold up in the real automotive environment.
+          </p>
+        </div>
+
+        <footer class="hero__footer">
+          <p>Mathews Joy · <span id="year"></span></p>
+        </footer>
+      </div>
+    </main>
+    <script>
+      document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
+  </body>
+</html>
