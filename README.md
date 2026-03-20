@@ -27,3 +27,4 @@ It’s plain HTML/CSS — drag the folder to [Netlify Drop](https://app.netlify.
 | `index.html` | Page + copy |
 | `css/styles.css` | Layout, grain, breakpoints, reduced motion |
 | `assets/hero.jpg` | Hero background |
+| `assets/favicon.svg` | Tab icon (sparkle / star vibe) |

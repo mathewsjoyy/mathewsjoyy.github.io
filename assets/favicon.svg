@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" aria-hidden="true">
+  <defs>
+    <linearGradient id="spark" x1="2" y1="2" x2="30" y2="30" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2ec8d9" />
+      <stop offset="0.38" stop-color="#4285f4" />
+      <stop offset="0.72" stop-color="#9b72cb" />
+      <stop offset="1" stop-color="#e871b8" />
+    </linearGradient>
+  </defs>
+  <g fill="url(#spark)">
+    <ellipse cx="16" cy="16" rx="11.5" ry="4.2" />
+    <ellipse cx="16" cy="16" rx="4.2" ry="11.5" />
+  </g>
+</svg>
