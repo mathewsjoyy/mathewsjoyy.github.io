@@ -183,6 +183,9 @@ body {
   grid-row: 2;
   align-self: center;
   max-width: 40ch;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.1rem, 2.5vh, 1.65rem);
 }
 
 .hero__bio p {
@@ -203,6 +206,122 @@ html.use-tw-animate .tw-target.tw-reveal {
   opacity: 1;
 }
 
+/* Tool logos: Simple Icons SVGs in /assets/logos (static), mono for dark hero */
+.tech-band {
+  padding-top: clamp(0.35rem, 1vh, 0.65rem);
+  border-top: 1px solid rgba(245, 245, 245, 0.08);
+  transition:
+    opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.55s ease;
+}
+
+html.use-tw-animate .tech-band:not(.tech-band--visible) {
+  opacity: 0;
+  transform: translateY(14px);
+  pointer-events: none;
+  border-top-color: transparent;
+}
+
+.tech-band.tech-band--visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+  border-top-color: rgba(245, 245, 245, 0.08);
+}
+
+.tech-band.tech-band--visible .tech-band__list li {
+  animation: techLogoRise 0.55s cubic-bezier(0.22, 1, 0.4, 1) backwards;
+}
+
+.tech-band.tech-band--visible .tech-band__list li:nth-child(1) {
+  animation-delay: 0.05s;
+}
+.tech-band.tech-band--visible .tech-band__list li:nth-child(2) {
+  animation-delay: 0.09s;
+}
+.tech-band.tech-band--visible .tech-band__list li:nth-child(3) {
+  animation-delay: 0.13s;
+}
+.tech-band.tech-band--visible .tech-band__list li:nth-child(4) {
+  animation-delay: 0.17s;
+}
+.tech-band.tech-band--visible .tech-band__list li:nth-child(5) {
+  animation-delay: 0.21s;
+}
+.tech-band.tech-band--visible .tech-band__list li:nth-child(6) {
+  animation-delay: 0.25s;
+}
+.tech-band.tech-band--visible .tech-band__list li:nth-child(7) {
+  animation-delay: 0.29s;
+}
+.tech-band.tech-band--visible .tech-band__list li:nth-child(8) {
+  animation-delay: 0.33s;
+}
+.tech-band.tech-band--visible .tech-band__list li:nth-child(9) {
+  animation-delay: 0.37s;
+}
+.tech-band.tech-band--visible .tech-band__list li:nth-child(10) {
+  animation-delay: 0.41s;
+}
+
+@keyframes techLogoRise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.tech-band__list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: clamp(0.5rem, 2vw, 1rem);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.tech-band__link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.3rem;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+}
+
+.tech-band__link:focus-visible {
+  outline: 2px solid rgba(245, 245, 245, 0.55);
+  outline-offset: 3px;
+}
+
+.tech-band__link:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Mono / low-contrast: flatten brand colours to soft light gray */
+.tech-band__logo {
+  display: block;
+  width: clamp(1.35rem, 3.2vw, 1.7rem);
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: contain;
+  filter: grayscale(1) brightness(0) invert(1) opacity(0.38);
+  transition: filter 0.25s ease, opacity 0.25s ease;
+}
+
+.tech-band__link:hover .tech-band__logo,
+.tech-band__link:focus-visible .tech-band__logo {
+  filter: grayscale(1) brightness(0) invert(1) opacity(0.62);
+}
+
 .hero__footer {
   grid-column: 1;
   grid-row: 3;
@@ -219,19 +338,20 @@ html.use-tw-animate .tw-target.tw-reveal {
   text-shadow: 0 1px 12px rgba(0, 0, 0, 0.5);
 }
 
-.hero__link {
-  color: inherit;
+/* Beat UA a:link / :any-link (element + pseudo beats a lone class — was showing default blue) */
+a.hero__link:any-link {
+  color: var(--text-muted);
   text-decoration: none;
   border-bottom: 1px solid rgba(245, 245, 245, 0.28);
   transition: color 0.2s ease, border-color 0.2s ease;
 }
 
-.hero__link:hover {
+a.hero__link:hover {
   color: var(--text);
   border-bottom-color: rgba(245, 245, 245, 0.55);
 }
 
-.hero__link:focus-visible {
+a.hero__link:focus-visible {
   outline: 2px solid rgba(245, 245, 245, 0.65);
   outline-offset: 3px;
 }
@@ -271,6 +391,10 @@ html.use-tw-animate .tw-target.tw-reveal {
     animation: none;
     opacity: 1;
     transform: none;
+  }
+
+  .tech-band.tech-band--visible .tech-band__list li {
+    animation: none;
   }
 
   .hero__letter {

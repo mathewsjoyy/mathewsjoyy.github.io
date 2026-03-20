@@ -28,3 +28,5 @@ It’s plain HTML/CSS — drag the folder to [Netlify Drop](https://app.netlify.
 | `css/styles.css` | Layout, grain, breakpoints, reduced motion |
 | `assets/hero.jpg` | Hero background |
 | `assets/favicon.svg` | Tab icon (sparkle / star vibe) |
+
+Tool icons live under [`assets/logos/`](assets/logos/) as SVGs (sourced from [Simple Icons](https://simpleicons.org/), CC0) so the page stays **fully static** with no icon CDN. They sit under the bio on the right (desktop) so the bottom of the hero photo stays clear. Trademarks belong to their owners; replace files or `src` paths in `index.html` if your stack changes.

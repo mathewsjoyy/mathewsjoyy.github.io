@@ -38,13 +38,13 @@
       }
     </script>
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="css/styles.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="css/styles.css" />
   </head>
   <body>
     <main class="hero">
@@ -82,6 +82,180 @@
             camera data into reliable decisions on the line, and iterating with
             engineers so models hold up in the real manufacturing environment.
           </p>
+          <section class="tech-band" id="hero-tech-band" aria-label="Tools and platforms">
+            <ul class="tech-band__list">
+              <li>
+                <a
+                  class="tech-band__link"
+                  href="https://www.python.org/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title="Python"
+                  ><img
+                    class="tech-band__logo"
+                    src="assets/logos/python.svg"
+                    width="28"
+                    height="28"
+                    alt="Python"
+                    loading="lazy"
+                    decoding="async"
+                /></a>
+              </li>
+              <li>
+                <a
+                  class="tech-band__link"
+                  href="https://cloud.google.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title="Google Cloud"
+                  ><img
+                    class="tech-band__logo"
+                    src="assets/logos/googlecloud.svg"
+                    width="28"
+                    height="28"
+                    alt="Google Cloud"
+                    loading="lazy"
+                    decoding="async"
+                /></a>
+              </li>
+              <li>
+                <a
+                  class="tech-band__link"
+                  href="https://deepmind.google/technologies/gemini/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title="Google Gemini"
+                  ><img
+                    class="tech-band__logo"
+                    src="assets/logos/googlegemini.svg"
+                    width="28"
+                    height="28"
+                    alt="Google Gemini"
+                    loading="lazy"
+                    decoding="async"
+                /></a>
+              </li>
+              <li>
+                <a
+                  class="tech-band__link"
+                  href="https://pytorch.org/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title="PyTorch"
+                  ><img
+                    class="tech-band__logo"
+                    src="assets/logos/pytorch.svg"
+                    width="28"
+                    height="28"
+                    alt="PyTorch"
+                    loading="lazy"
+                    decoding="async"
+                /></a>
+              </li>
+              <li>
+                <a
+                  class="tech-band__link"
+                  href="https://www.tensorflow.org/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title="TensorFlow"
+                  ><img
+                    class="tech-band__logo"
+                    src="assets/logos/tensorflow.svg"
+                    width="28"
+                    height="28"
+                    alt="TensorFlow"
+                    loading="lazy"
+                    decoding="async"
+                /></a>
+              </li>
+              <li>
+                <a
+                  class="tech-band__link"
+                  href="https://opencv.org/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title="OpenCV"
+                  ><img
+                    class="tech-band__logo"
+                    src="assets/logos/opencv.svg"
+                    width="28"
+                    height="28"
+                    alt="OpenCV"
+                    loading="lazy"
+                    decoding="async"
+                /></a>
+              </li>
+              <li>
+                <a
+                  class="tech-band__link"
+                  href="https://scikit-learn.org/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title="scikit-learn"
+                  ><img
+                    class="tech-band__logo"
+                    src="assets/logos/scikitlearn.svg"
+                    width="28"
+                    height="28"
+                    alt="scikit-learn"
+                    loading="lazy"
+                    decoding="async"
+                /></a>
+              </li>
+              <li>
+                <a
+                  class="tech-band__link"
+                  href="https://pandas.pydata.org/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title="pandas"
+                  ><img
+                    class="tech-band__logo"
+                    src="assets/logos/pandas.svg"
+                    width="28"
+                    height="28"
+                    alt="pandas"
+                    loading="lazy"
+                    decoding="async"
+                /></a>
+              </li>
+              <li>
+                <a
+                  class="tech-band__link"
+                  href="https://www.docker.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title="Docker"
+                  ><img
+                    class="tech-band__logo"
+                    src="assets/logos/docker.svg"
+                    width="28"
+                    height="28"
+                    alt="Docker"
+                    loading="lazy"
+                    decoding="async"
+                /></a>
+              </li>
+              <li>
+                <a
+                  class="tech-band__link"
+                  href="https://developer.mozilla.org/en-US/docs/Web/JavaScript"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title="JavaScript"
+                  ><img
+                    class="tech-band__logo"
+                    src="assets/logos/javascript.svg"
+                    width="28"
+                    height="28"
+                    alt="JavaScript"
+                    loading="lazy"
+                    decoding="async"
+                /></a>
+              </li>
+            </ul>
+          </section>
         </div>
 
         <footer class="hero__footer">
@@ -178,6 +352,16 @@
             })
             .then(function () {
               return typePlain(bioEl, bioText, 14);
+            })
+            .then(function () {
+              var band = document.getElementById("hero-tech-band");
+              if (!band) return;
+              return new Promise(function (resolve) {
+                window.setTimeout(function () {
+                  band.classList.add("tech-band--visible");
+                  resolve();
+                }, 320);
+              });
             });
         }
 
