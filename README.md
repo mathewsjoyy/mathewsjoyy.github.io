@@ -1,37 +1,29 @@
-# Mathews Joy — personal site
+# mathewsjoyy.github.io
 
-Static, single-page portfolio with a full-viewport hero: dark photography, sharp film-style grain overlay, and minimal type (layout inspired by the [Freddie](https://wordpress.com/theme/freddie?tab_filter=recommended) WordPress theme—not a copy of its assets).
+My personal site — one static page, nothing fancy. Big hero image, a bit of grain, simple type. I took cues from the [Freddie](https://wordpress.com/theme/freddie?tab_filter=recommended) theme for the layout; the code and assets here are mine.
 
-## Swap the hero image
+## Hero image
 
-Replace `[assets/hero.jpg](assets/hero.jpg)` with your own photo (same path and name, or update `--hero-img` in `[css/styles.css](css/styles.css)` and the `src` on the `<img>` in `[index.html](index.html)` if you use a different filename).
+Drop your photo in as `assets/hero.jpg`, or change the path in `index.html` and the `--hero-img` variable in `css/styles.css` if you rename it.
 
-The base gradient behind the stack in `.hero__visual` stays visible if the image is slow to load; use a dark, high-contrast shot for the closest match to the reference look.
+There’s a dark gradient behind the image so it doesn’t flash empty while loading — works best with something dark and contrasty.
 
-**Hero photo:** `hero.jpg` is a minimal dark green Jaguar E-Type shot by [Hunter Scott](https://unsplash.com/@huntercreatesthings) on [Unsplash](https://unsplash.com/photos/a-classic-dark-green-jaguar-e-type-car-L2PpmkMQYww) (free under the [Unsplash License](https://unsplash.com/license)). Swap the file anytime for your own image.
+The current `hero.jpg` is a green Jag on [Unsplash](https://unsplash.com/photos/a-classic-dark-green-jaguar-e-type-car-L2PpmkMQYww) by [Hunter Scott](https://unsplash.com/@huntercreatesthings) ([license](https://unsplash.com/license)). I’ll probably swap it eventually.
 
-## Preview locally
+## Run it locally
 
-- **Direct:** open `index.html` in a browser (double-click or drag onto a tab).
-- **Local server (optional):** from this folder run `npx --yes serve` or `python -m http.server 8080`, then open the URL shown.
+Open `index.html` in a browser, or from this folder:
 
-## Deploy
+`npx --yes serve` or `python -m http.server 8080`
 
-Upload the folder to any static host:
+## Host it
 
-- [Netlify Drop](https://app.netlify.com/drop) or Git-connected Netlify
-- [Cloudflare Pages](https://pages.cloudflare.com/)
-- [GitHub Pages](https://pages.github.com/) (publish the repo root or a `/docs` folder)
+It’s plain HTML/CSS — drag the folder to [Netlify Drop](https://app.netlify.com/drop), hook the repo to Netlify/Cloudflare, or use [GitHub Pages](https://pages.github.com/) from the repo root (or `/docs` if you prefer). No build.
 
-No build step is required.
+## What’s where
 
-## Files
-
-
-| Path              | Role                                                   |
-| ----------------- | ------------------------------------------------------ |
-| `index.html`      | Markup and copy                                        |
-| `css/styles.css`  | Layout, effects, breakpoints, `prefers-reduced-motion` |
-| `assets/hero.jpg` | Full-bleed background image                            |
-
-
+| File | What it is |
+| ---- | ---------- |
+| `index.html` | Page + copy |
+| `css/styles.css` | Layout, grain, breakpoints, reduced motion |
+| `assets/hero.jpg` | Hero background |
