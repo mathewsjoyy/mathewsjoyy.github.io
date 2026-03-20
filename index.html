@@ -3,11 +3,40 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#050505" />
     <meta
       name="description"
       content="Mathews Joy — Graduate at JLR. AI, machine learning, and vision inspection systems."
     />
     <title>Mathews Joy</title>
+    <link rel="canonical" href="https://mathewsjoyy.github.io/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://mathewsjoyy.github.io/" />
+    <meta property="og:title" content="Mathews Joy" />
+    <meta
+      property="og:description"
+      content="Mathews Joy — Graduate at JLR. AI, machine learning, and vision inspection systems."
+    />
+    <meta property="og:image" content="https://mathewsjoyy.github.io/assets/hero.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Mathews Joy" />
+    <meta
+      name="twitter:description"
+      content="Mathews Joy — Graduate at JLR. AI, machine learning, and vision inspection systems."
+    />
+    <meta name="twitter:image" content="https://mathewsjoyy.github.io/assets/hero.jpg" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Mathews Joy",
+        "url": "https://mathewsjoyy.github.io/",
+        "sameAs": [
+          "https://www.linkedin.com/in/mathewsjoy/",
+          "https://github.com/mathewsjoyy"
+        ]
+      }
+    </script>
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -56,7 +85,22 @@
         </div>
 
         <footer class="hero__footer">
-          <p>Mathews Joy · <span id="year"></span></p>
+          <p>
+            Mathews Joy · <span id="year"></span> ·
+            <a
+              class="hero__link"
+              href="https://www.linkedin.com/in/mathewsjoy/"
+              target="_blank"
+              rel="noopener noreferrer"
+              >LinkedIn</a>
+            ·
+            <a
+              class="hero__link"
+              href="https://github.com/mathewsjoyy"
+              target="_blank"
+              rel="noopener noreferrer"
+              >GitHub</a>
+          </p>
         </footer>
       </div>
     </main>
@@ -70,6 +114,8 @@
         if (reduceMotion) return;
 
         document.documentElement.classList.add("use-tw-animate");
+
+        var entranceMs = 720;
 
         function typePlain(el, full, msPerChar) {
           return new Promise(function (resolve) {
@@ -116,22 +162,26 @@
           });
         }
 
-        var tagEl = document.getElementById("hero-taglines");
-        var bioEl = document.getElementById("hero-bio");
-        if (!tagEl || !bioEl) return;
+        function startTyping() {
+          var tagEl = document.getElementById("hero-taglines");
+          var bioEl = document.getElementById("hero-bio");
+          if (!tagEl || !bioEl) return;
 
-        var tagText = tagEl.innerText.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
-        var bioText = bioEl.textContent.trim();
+          var tagText = tagEl.innerText.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+          var bioText = bioEl.textContent.trim();
 
-        typeTaglines(tagEl, tagText, 22)
-          .then(function () {
-            return new Promise(function (resolve) {
-              window.setTimeout(resolve, 280);
+          typeTaglines(tagEl, tagText, 22)
+            .then(function () {
+              return new Promise(function (resolve) {
+                window.setTimeout(resolve, 280);
+              });
+            })
+            .then(function () {
+              return typePlain(bioEl, bioText, 14);
             });
-          })
-          .then(function () {
-            return typePlain(bioEl, bioText, 14);
-          });
+        }
+
+        window.setTimeout(startTyping, entranceMs);
       })();
     </script>
   </body>
