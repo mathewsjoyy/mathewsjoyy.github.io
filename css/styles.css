@@ -147,6 +147,15 @@ body {
   text-shadow: 0 1px 18px rgba(0, 0, 0, 0.55);
 }
 
+/* Typewriter: hide until JS reveals (avoids flash of full text before animation) */
+html.use-tw-animate .tw-target {
+  opacity: 0;
+}
+
+html.use-tw-animate .tw-target.tw-reveal {
+  opacity: 1;
+}
+
 .hero__footer {
   grid-column: 1;
   grid-row: 3;

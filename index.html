@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="no-js">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -37,7 +37,7 @@
       <div class="hero__content">
         <header class="hero__intro">
           <h1 class="hero__name">Mathews Joy</h1>
-          <p class="hero__taglines">
+          <p class="hero__taglines tw-target" id="hero-taglines">
             Graduate at JLR<br />
             Automotive · AI / ML<br />
             Vision inspection systems
@@ -45,7 +45,7 @@
         </header>
 
         <div class="hero__bio">
-          <p>
+          <p class="tw-target" id="hero-bio">
             I work where production meets perception: building and evaluating
             machine learning pipelines for vision inspection—translating noisy
             camera data into reliable decisions on the line, and iterating with
@@ -59,7 +59,78 @@
       </div>
     </main>
     <script>
+      document.documentElement.classList.remove("no-js");
+
       document.getElementById("year").textContent = new Date().getFullYear();
+
+      (function () {
+        var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if (reduceMotion) return;
+
+        document.documentElement.classList.add("use-tw-animate");
+
+        function typePlain(el, full, msPerChar) {
+          return new Promise(function (resolve) {
+            var i = 0;
+            el.textContent = "";
+            el.classList.add("tw-reveal");
+            function tick() {
+              if (i >= full.length) {
+                resolve();
+                return;
+              }
+              el.textContent += full.slice(i, i + 1);
+              i += 1;
+              window.setTimeout(tick, msPerChar);
+            }
+            tick();
+          });
+        }
+
+        function typeTaglines(el, full, msPerChar) {
+          return new Promise(function (resolve) {
+            var i = 0;
+            el.innerHTML = "";
+            el.classList.add("tw-reveal");
+            function tick() {
+              if (i >= full.length) {
+                resolve();
+                return;
+              }
+              var ch = full.charAt(i);
+              if (ch === "\n") {
+                el.appendChild(document.createElement("br"));
+              } else {
+                var last = el.lastChild;
+                if (!last || last.nodeType !== Node.TEXT_NODE) {
+                  last = el.appendChild(document.createTextNode(""));
+                }
+                last.nodeValue += ch;
+              }
+              i += 1;
+              window.setTimeout(tick, msPerChar);
+            }
+            tick();
+          });
+        }
+
+        var tagEl = document.getElementById("hero-taglines");
+        var bioEl = document.getElementById("hero-bio");
+        if (!tagEl || !bioEl) return;
+
+        var tagText = tagEl.innerText.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+        var bioText = bioEl.textContent.trim();
+
+        typeTaglines(tagEl, tagText, 22)
+          .then(function () {
+            return new Promise(function (resolve) {
+              window.setTimeout(resolve, 280);
+            });
+          })
+          .then(function () {
+            return typePlain(bioEl, bioText, 14);
+          });
+      })();
     </script>
   </body>
 </html>
