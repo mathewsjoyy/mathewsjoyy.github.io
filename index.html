@@ -265,8 +265,8 @@
       </div>
     </main>
 
-    <section class="journey" id="journey" aria-labelledby="journey-heading">
-      <header class="journey__header">
+    <section class="journey" aria-labelledby="journey-heading">
+      <header class="journey__header" id="journey">
         <p class="journey__eyebrow">The journey</p>
         <h2 class="journey__heading" id="journey-heading">
           From data storytelling<br />
@@ -578,7 +578,8 @@
         }
 
         function scrollTargetTop() {
-          return Math.round(target.offsetTop);
+          var rect = target.getBoundingClientRect();
+          return Math.round(rect.top + window.scrollY);
         }
 
         function animateScrollTo(end) {
@@ -604,7 +605,10 @@
             }
 
             setScrollTop(scrollTargetTop());
-            root.style.scrollBehavior = previousBehavior;
+            window.requestAnimationFrame(function () {
+              setScrollTop(scrollTargetTop());
+              root.style.scrollBehavior = previousBehavior;
+            });
           }
 
           window.requestAnimationFrame(step);
@@ -614,7 +618,7 @@
           event.preventDefault();
 
           if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-            target.scrollIntoView({ block: "start" });
+            setScrollTop(scrollTargetTop());
             history.replaceState(null, "", "#journey");
             return;
           }
@@ -622,6 +626,12 @@
           animateScrollTo(scrollTargetTop());
           history.replaceState(null, "", "#journey");
         });
+
+        if (window.location.hash === "#journey") {
+          window.requestAnimationFrame(function () {
+            setScrollTop(scrollTargetTop());
+          });
+        }
       })();
     </script>
   </body>
