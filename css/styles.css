@@ -473,36 +473,7 @@ html.use-tw-animate .tech-band:not(.tech-band--visible) {
   overflow: hidden;
   background: var(--card-bg);
   border: 1px solid rgba(245, 245, 245, 0.07);
-  opacity: 1;
-  transform: none;
-  transition:
-    opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1),
-    transform 0.75s cubic-bezier(0.22, 1, 0.36, 1),
-    border-color 0.35s ease;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  html.journey-animate .journey-card:not(.journey-card--visible) {
-    opacity: 0;
-    transform: translateY(18px);
-  }
-}
-
-.journey-card--visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.journey-card:nth-child(2).journey-card--visible {
-  transition-delay: 0.08s;
-}
-
-.journey-card:nth-child(3).journey-card--visible {
-  transition-delay: 0.16s;
-}
-
-.journey-card:nth-child(4).journey-card--visible {
-  transition-delay: 0.24s;
+  transition: border-color 0.35s ease;
 }
 
 .journey-card:hover,
@@ -701,11 +672,5 @@ a.journey__link:focus-visible {
 
   .hero__scroll-icon {
     animation: none;
-  }
-
-  .journey-card {
-    opacity: 1;
-    transform: none;
-    transition: none;
   }
 }
