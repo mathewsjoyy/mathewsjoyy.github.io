@@ -401,13 +401,16 @@ html.use-tw-animate .tech-band:not(.tech-band--visible) {
 .journey {
   position: relative;
   min-height: 100svh;
-  display: grid;
-  grid-template-rows: minmax(0, 1fr) auto minmax(0, 1fr);
+  display: flex;
+  flex-direction: column;
   background: var(--journey-bg);
 }
 
 .journey__content {
-  grid-row: 2;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   min-width: 0;
 }
 
@@ -616,9 +619,8 @@ html.use-tw-animate .tech-band:not(.tech-band--visible) {
 }
 
 .journey__footer {
-  grid-row: 3;
-  align-self: end;
-  padding: 0 var(--space) clamp(1.25rem, 3vh, 2rem);
+  flex-shrink: 0;
+  padding: clamp(2rem, 4vh, 3rem) var(--space) clamp(1.25rem, 3vh, 2rem);
 }
 
 .journey__footer p {
