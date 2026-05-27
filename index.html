@@ -42,7 +42,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Lora:ital,wght@0,400;0,500;1,400&display=swap"
       rel="stylesheet"
     />
   </head>
@@ -258,30 +258,202 @@
           </section>
         </div>
 
-        <footer class="hero__footer">
-          <p>
-            Mathews Joy · <span id="year"></span> ·
-            <a
-              class="hero__link"
-              href="https://www.linkedin.com/in/mathewsjoy/"
-              target="_blank"
-              rel="noopener noreferrer"
-              >LinkedIn</a>
-            ·
-            <a
-              class="hero__link"
-              href="https://github.com/mathewsjoyy"
-              target="_blank"
-              rel="noopener noreferrer"
-              >GitHub</a>
-          </p>
-        </footer>
+        <a class="hero__scroll" href="#journey">
+          Explore the journey
+          <span class="hero__scroll-icon" aria-hidden="true">↓</span>
+        </a>
       </div>
     </main>
+
+    <section class="journey" id="journey" aria-labelledby="journey-heading">
+      <header class="journey__header">
+        <p class="journey__eyebrow">The journey</p>
+        <h2 class="journey__heading" id="journey-heading">
+          From data storytelling<br />
+          to production perception
+        </h2>
+        <p class="journey__lede">
+          I started with data and the visual side of analysis — then computer
+          vision, and the work of making models reliable on a production line.
+        </p>
+      </header>
+
+      <div class="journey__track" tabindex="0" aria-label="Career timeline">
+        <article class="journey-card journey-card--foundations">
+          <div class="journey-card__visual" aria-hidden="true">
+            <svg viewBox="0 0 240 300" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <pattern id="dots-foundations" width="5" height="5" patternUnits="userSpaceOnUse">
+                  <circle cx="2.5" cy="2.5" r="1.15" fill="#45a892" opacity="0.72" />
+                </pattern>
+              </defs>
+              <rect width="240" height="300" fill="#0e1218" />
+              <g transform="translate(120 150) scale(1.12) translate(-120 -150)">
+                <path d="M40 230 L120 145 L200 230 Z" fill="url(#dots-foundations)" />
+                <rect x="72" y="118" width="96" height="112" fill="url(#dots-foundations)" opacity="0.88" />
+                <rect x="98" y="88" width="44" height="36" fill="url(#dots-foundations)" />
+                <circle cx="60" cy="248" r="28" fill="url(#dots-foundations)" opacity="0.52" />
+                <circle cx="188" cy="252" r="22" fill="url(#dots-foundations)" opacity="0.42" />
+              </g>
+            </svg>
+          </div>
+          <div class="journey-card__grain" aria-hidden="true"></div>
+          <div class="journey-card__scrim" aria-hidden="true"></div>
+          <div class="journey-card__body">
+            <p class="journey-card__phase">01 · Foundations</p>
+            <h3 class="journey-card__title">University</h3>
+            <p class="journey-card__detail">
+              Started with the fundamentals — curious about how data could explain
+              the world, and drawn to projects where analysis had a visual, creative
+              edge.
+            </p>
+            <ul class="journey-card__tags">
+              <li>Coursework</li>
+              <li>Curiosity</li>
+              <li>First datasets</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="journey-card journey-card--data">
+          <div class="journey-card__visual" aria-hidden="true">
+            <svg viewBox="0 0 240 300" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <pattern id="dots-data" width="5" height="5" patternUnits="userSpaceOnUse">
+                  <circle cx="2.5" cy="2.5" r="1.15" fill="#d4ad35" opacity="0.74" />
+                </pattern>
+              </defs>
+              <rect width="240" height="300" fill="#0e1218" />
+              <g transform="translate(120 150) scale(1.12) translate(-120 -150)">
+                <rect x="36" y="188" width="28" height="72" fill="url(#dots-data)" opacity="0.58" />
+                <rect x="76" y="148" width="28" height="112" fill="url(#dots-data)" opacity="0.76" />
+                <rect x="116" y="118" width="28" height="142" fill="url(#dots-data)" />
+                <rect x="156" y="168" width="28" height="92" fill="url(#dots-data)" opacity="0.7" />
+                <path d="M48 108 Q120 52 192 96" fill="none" stroke="#d4ad35" stroke-width="2" opacity="0.45" stroke-dasharray="4 6" />
+                <circle cx="120" cy="78" r="34" fill="url(#dots-data)" opacity="0.48" />
+              </g>
+            </svg>
+          </div>
+          <div class="journey-card__grain" aria-hidden="true"></div>
+          <div class="journey-card__scrim" aria-hidden="true"></div>
+          <div class="journey-card__body">
+            <p class="journey-card__phase">02 · Data &amp; design</p>
+            <h3 class="journey-card__title">Visual analysis</h3>
+            <p class="journey-card__detail">
+              Really enjoyed turning messy numbers into something you could see and
+              understand — charts, patterns, and the creative side of making data
+              legible.
+            </p>
+            <ul class="journey-card__tags">
+              <li>pandas</li>
+              <li>Storytelling</li>
+              <li>Exploration</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="journey-card journey-card--vision">
+          <div class="journey-card__visual" aria-hidden="true">
+            <svg viewBox="0 0 240 300" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <pattern id="dots-vision" width="5" height="5" patternUnits="userSpaceOnUse">
+                  <circle cx="2.5" cy="2.5" r="1.15" fill="#5590e8" opacity="0.74" />
+                </pattern>
+              </defs>
+              <rect width="240" height="300" fill="#0e1218" />
+              <g transform="translate(120 150) scale(1.12) translate(-120 -150)">
+                <circle cx="120" cy="138" r="72" fill="none" stroke="url(#dots-vision)" stroke-width="14" />
+                <circle cx="120" cy="138" r="36" fill="url(#dots-vision)" opacity="0.82" />
+                <circle cx="120" cy="138" r="12" fill="#5590e8" opacity="0.95" />
+                <rect x="44" y="228" width="152" height="10" rx="2" fill="url(#dots-vision)" opacity="0.5" />
+                <rect x="64" y="246" width="112" height="8" rx="2" fill="url(#dots-vision)" opacity="0.38" />
+              </g>
+            </svg>
+          </div>
+          <div class="journey-card__grain" aria-hidden="true"></div>
+          <div class="journey-card__scrim" aria-hidden="true"></div>
+          <div class="journey-card__body">
+            <p class="journey-card__phase">03 · Perception</p>
+            <h3 class="journey-card__title">Computer vision</h3>
+            <p class="journey-card__detail">
+              Graduated into computer vision and machine learning — models that
+              read camera feeds, not spreadsheets, and problems where perception
+              has to be reliable.
+            </p>
+            <ul class="journey-card__tags">
+              <li>PyTorch</li>
+              <li>OpenCV</li>
+              <li>Deep learning</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="journey-card journey-card--production">
+          <div class="journey-card__visual" aria-hidden="true">
+            <svg viewBox="0 0 240 300" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <pattern id="dots-production" width="5" height="5" patternUnits="userSpaceOnUse">
+                  <circle cx="2.5" cy="2.5" r="1.15" fill="#de7359" opacity="0.74" />
+                </pattern>
+              </defs>
+              <rect width="240" height="300" fill="#0e1218" />
+              <g transform="translate(120 150) scale(1.12) translate(-120 -150)">
+                <rect x="32" y="96" width="176" height="14" rx="3" fill="url(#dots-production)" opacity="0.62" />
+                <rect x="32" y="126" width="176" height="14" rx="3" fill="url(#dots-production)" opacity="0.76" />
+                <rect x="32" y="156" width="176" height="14" rx="3" fill="url(#dots-production)" />
+                <rect x="32" y="186" width="176" height="14" rx="3" fill="url(#dots-production)" opacity="0.88" />
+                <circle cx="52" cy="103" r="5" fill="#de7359" />
+                <circle cx="52" cy="133" r="5" fill="#de7359" opacity="0.85" />
+                <circle cx="52" cy="163" r="5" fill="#de7359" opacity="0.7" />
+                <circle cx="52" cy="193" r="5" fill="#de7359" opacity="0.58" />
+                <path d="M88 248 L152 248 L168 268 L72 268 Z" fill="url(#dots-production)" opacity="0.48" />
+              </g>
+            </svg>
+          </div>
+          <div class="journey-card__grain" aria-hidden="true"></div>
+          <div class="journey-card__scrim" aria-hidden="true"></div>
+          <div class="journey-card__body">
+            <p class="journey-card__phase">04 · On the line</p>
+            <h3 class="journey-card__title">Production systems</h3>
+            <p class="journey-card__detail">
+              Now I work where models meet manufacturing — vision inspection
+              pipelines, on-line inference, and researching different models and techniques so systems
+              stay robust in production environments.
+            </p>
+            <ul class="journey-card__tags">
+              <li>JLR</li>
+              <li>On-line ML</li>
+              <li>VLMs &amp; Gemini</li>
+            </ul>
+          </div>
+        </article>
+      </div>
+
+      <footer class="journey__footer">
+        <p>
+          Mathews Joy · <span id="year"></span> ·
+          <a
+            class="journey__link"
+            href="https://www.linkedin.com/in/mathewsjoy/"
+            target="_blank"
+            rel="noopener noreferrer"
+            >LinkedIn</a>
+          ·
+          <a
+            class="journey__link"
+            href="https://github.com/mathewsjoyy"
+            target="_blank"
+            rel="noopener noreferrer"
+            >GitHub</a>
+        </p>
+      </footer>
+    </section>
+
     <script>
       document.documentElement.classList.remove("no-js");
 
-      document.getElementById("year").textContent = new Date().getFullYear();
+      var year = new Date().getFullYear();
+      document.getElementById("year").textContent = year;
 
       (function () {
         var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -366,6 +538,99 @@
         }
 
         window.setTimeout(startTyping, entranceMs);
+      })();
+
+      (function () {
+        var cards = document.querySelectorAll(".journey-card");
+        if (!cards.length) return;
+
+        var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if (reduceMotion) {
+          cards.forEach(function (card) {
+            card.classList.add("journey-card--visible");
+          });
+          return;
+        }
+
+        var observer = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("journey-card--visible");
+              }
+            });
+          },
+          { threshold: 0.25, rootMargin: "0px 0px -8% 0px" }
+        );
+
+        cards.forEach(function (card) {
+          observer.observe(card);
+        });
+      })();
+
+      (function () {
+        var link = document.querySelector(".hero__scroll");
+        var target = document.getElementById("journey");
+        if (!link || !target) return;
+
+        function easeInOutCubic(t) {
+          return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+        }
+
+        function getScrollTop() {
+          return window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
+        }
+
+        function setScrollTop(value) {
+          document.documentElement.scrollTop = value;
+          document.body.scrollTop = value;
+        }
+
+        function scrollTargetTop() {
+          var scrollMargin = parseFloat(getComputedStyle(target).scrollMarginTop) || 0;
+          return target.getBoundingClientRect().top + getScrollTop() - scrollMargin;
+        }
+
+        function animateScrollTo(end) {
+          var root = document.documentElement;
+          var start = getScrollTop();
+          var distance = end - start;
+          if (Math.abs(distance) < 2) return;
+
+          var duration = Math.min(1400, Math.max(900, Math.abs(distance) * 0.75));
+          var startTime = null;
+          var previousBehavior = root.style.scrollBehavior;
+
+          root.style.scrollBehavior = "auto";
+
+          function step(timestamp) {
+            if (startTime === null) startTime = timestamp;
+            var progress = Math.min((timestamp - startTime) / duration, 1);
+            setScrollTop(start + distance * easeInOutCubic(progress));
+
+            if (progress < 1) {
+              window.requestAnimationFrame(step);
+              return;
+            }
+
+            root.style.scrollBehavior = previousBehavior;
+          }
+
+          window.requestAnimationFrame(step);
+        }
+
+        link.addEventListener("click", function (event) {
+          event.preventDefault();
+
+          if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+            target.scrollIntoView({ block: "start" });
+            history.replaceState(null, "", "#journey");
+            return;
+          }
+
+          animateScrollTo(scrollTargetTop());
+          history.replaceState(null, "", "#journey");
+        });
       })();
     </script>
   </body>
