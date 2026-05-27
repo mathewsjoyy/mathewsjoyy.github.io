@@ -400,12 +400,20 @@ html.use-tw-animate .tech-band:not(.tech-band--visible) {
 /* —— Journey timeline —— */
 .journey {
   position: relative;
+  min-height: 100svh;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto minmax(0, 1fr);
   background: var(--journey-bg);
-  padding-bottom: clamp(1.25rem, 3vh, 2rem);
+}
+
+.journey__panel {
+  grid-row: 2;
+  width: 100%;
+  min-width: 0;
 }
 
 .journey__header {
-  padding: clamp(1.5rem, 4vh, 2.5rem) var(--space) clamp(3.5rem, 7vh, 5rem);
+  padding: 0 var(--space) clamp(3.5rem, 7vh, 5rem);
   display: flex;
   flex-direction: column;
   align-items: center;
