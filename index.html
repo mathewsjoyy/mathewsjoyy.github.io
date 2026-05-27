@@ -265,8 +265,8 @@
       </div>
     </main>
 
-    <section class="journey" aria-labelledby="journey-heading">
-      <header class="journey__header" id="journey">
+    <section class="journey" id="journey" aria-labelledby="journey-heading">
+      <header class="journey__header">
         <p class="journey__eyebrow">The journey</p>
         <h2 class="journey__heading" id="journey-heading">
           From data storytelling<br />
@@ -578,8 +578,8 @@
         }
 
         function scrollTargetTop() {
-          var rect = target.getBoundingClientRect();
-          return Math.round(rect.top + window.scrollY);
+          var hero = document.querySelector(".hero");
+          return hero ? hero.offsetHeight : target.offsetTop;
         }
 
         function animateScrollTo(end) {
