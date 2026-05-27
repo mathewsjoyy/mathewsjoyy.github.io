@@ -407,11 +407,12 @@ html.use-tw-animate .tech-band:not(.tech-band--visible) {
 }
 
 .journey__panel {
-  flex: 1;
+  flex: 1 1 auto;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   width: 100%;
-  min-width: 0;
+  min-height: 0;
 }
 
 .journey__header {
@@ -619,7 +620,7 @@ html.use-tw-animate .tech-band:not(.tech-band--visible) {
 }
 
 .journey__footer {
-  margin-top: auto;
+  flex-shrink: 0;
   padding: clamp(1.25rem, 2.5vh, 1.75rem) var(--space) clamp(1.25rem, 3vh, 2rem);
 }
 
