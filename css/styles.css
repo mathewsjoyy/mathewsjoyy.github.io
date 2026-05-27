@@ -404,10 +404,6 @@ html.use-tw-animate .tech-band:not(.tech-band--visible) {
   padding-bottom: clamp(1.25rem, 3vh, 2rem);
 }
 
-.journey__content {
-  min-width: 0;
-}
-
 .journey__header {
   padding: clamp(1.5rem, 4vh, 2.5rem) var(--space) clamp(3.5rem, 7vh, 5rem);
   display: flex;
@@ -613,7 +609,7 @@ html.use-tw-animate .tech-band:not(.tech-band--visible) {
 }
 
 .journey__footer {
-  padding: clamp(2rem, 4vh, 3rem) var(--space) 0;
+  padding: clamp(1.25rem, 2.5vh, 1.75rem) var(--space) 0;
 }
 
 .journey__footer p {
