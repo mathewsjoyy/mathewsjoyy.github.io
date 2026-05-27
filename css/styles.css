@@ -400,22 +400,16 @@ html.use-tw-animate .tech-band:not(.tech-band--visible) {
 /* —— Journey timeline —— */
 .journey {
   position: relative;
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
   background: var(--journey-bg);
+  padding-bottom: clamp(1.25rem, 3vh, 2rem);
 }
 
 .journey__content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
   min-width: 0;
 }
 
 .journey__header {
-  padding: 0 var(--space) clamp(3.5rem, 7vh, 5rem);
+  padding: clamp(1.5rem, 4vh, 2.5rem) var(--space) clamp(3.5rem, 7vh, 5rem);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -619,8 +613,7 @@ html.use-tw-animate .tech-band:not(.tech-band--visible) {
 }
 
 .journey__footer {
-  flex-shrink: 0;
-  padding: clamp(2rem, 4vh, 3rem) var(--space) clamp(1.25rem, 3vh, 2rem);
+  padding: clamp(2rem, 4vh, 3rem) var(--space) 0;
 }
 
 .journey__footer p {
