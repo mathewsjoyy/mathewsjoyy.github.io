@@ -451,9 +451,29 @@
 
     <script>
       document.documentElement.classList.remove("no-js");
+      document.documentElement.classList.add("js-ready");
 
       var year = new Date().getFullYear();
       document.getElementById("year").textContent = year;
+
+      function revealAllContent() {
+        document.documentElement.classList.remove("use-tw-animate", "journey-animate");
+        document.querySelectorAll(".tw-target").forEach(function (el) {
+          el.classList.add("tw-reveal");
+        });
+        var band = document.getElementById("hero-tech-band");
+        if (band) band.classList.add("tech-band--visible");
+        document.querySelectorAll(".journey-card").forEach(function (card) {
+          card.classList.add("journey-card--visible");
+        });
+        var heroContent = document.querySelector(".hero__content");
+        if (heroContent) {
+          heroContent.style.opacity = "1";
+          heroContent.style.transform = "none";
+        }
+      }
+
+      window.setTimeout(revealAllContent, 10000);
 
       (function () {
         var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -551,6 +571,8 @@
           });
           return;
         }
+
+        document.documentElement.classList.add("journey-animate");
 
         var observer = new IntersectionObserver(
           function (entries) {
