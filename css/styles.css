@@ -24,6 +24,12 @@ body {
   min-height: 100%;
 }
 
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-snap-type: y proximity;
+  }
+}
+
 body {
   font-family: var(--font);
   color: var(--text);
@@ -33,9 +39,12 @@ body {
 
 .hero {
   position: relative;
-  height: 100dvh;
-  min-height: 100dvh;
+  height: 100svh;
+  min-height: 100svh;
+  max-height: 100svh;
   overflow: hidden;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
 }
 
 /* —— Background stack —— */
@@ -402,10 +411,16 @@ html.use-tw-animate .tech-band:not(.tech-band--visible) {
   background: var(--journey-bg);
   padding: clamp(3rem, 8vh, 5rem) 0 clamp(2.5rem, 6vh, 4rem);
   border-top: 1px solid rgba(245, 245, 245, 0.06);
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
 }
 
 .journey__header {
   padding: 0 var(--space) clamp(1.75rem, 4vh, 2.5rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
 .journey__eyebrow {
@@ -437,20 +452,34 @@ html.use-tw-animate .tech-band:not(.tech-band--visible) {
   color: var(--text-muted);
 }
 
+.journey__track-shell {
+  width: 100%;
+  padding: 0 var(--space);
+  box-sizing: border-box;
+}
+
 .journey__track {
   display: flex;
+  justify-content: safe center;
   gap: clamp(0.85rem, 2vw, 1.25rem);
-  width: fit-content;
-  max-width: 100%;
-  margin-inline: auto;
+  width: 100%;
   overflow-x: auto;
   overscroll-behavior-x: contain;
   scroll-snap-type: x mandatory;
   scroll-padding-inline: var(--space);
-  padding: 0 var(--space) clamp(0.5rem, 1.5vh, 1rem);
+  padding: 0 0 clamp(0.5rem, 1.5vh, 1rem);
   -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
   scrollbar-color: rgba(245, 245, 245, 0.22) transparent;
+}
+
+@supports not (justify-content: safe center) {
+  .journey__track {
+    justify-content: flex-start;
+    width: fit-content;
+    max-width: 100%;
+    margin-inline: auto;
+  }
 }
 
 .journey__track:focus-visible {
@@ -633,12 +662,13 @@ a.journey__link:focus-visible {
 @media (max-width: 768px) {
   .hero {
     height: auto;
-    min-height: 100dvh;
+    min-height: 100svh;
+    max-height: none;
   }
 
   .hero__content {
     height: auto;
-    min-height: 100dvh;
+    min-height: 100svh;
     grid-template-columns: 1fr;
     grid-template-rows: auto auto;
     align-content: start;
@@ -658,6 +688,10 @@ a.journey__link:focus-visible {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-snap-type: none;
+  }
+
   .hero__grain {
     opacity: 0.32;
   }

@@ -278,6 +278,7 @@
         </p>
       </header>
 
+      <div class="journey__track-shell">
       <div class="journey__track" tabindex="0" aria-label="Career timeline">
         <article class="journey-card journey-card--foundations">
           <div class="journey-card__visual" aria-hidden="true">
@@ -428,6 +429,7 @@
           </div>
         </article>
       </div>
+      </div>
 
       <footer class="journey__footer">
         <p>
@@ -576,6 +578,8 @@
         }
 
         function scrollTargetTop() {
+          var hero = document.querySelector(".hero");
+          if (hero) return hero.offsetHeight;
           return target.offsetTop;
         }
 
@@ -601,6 +605,7 @@
               return;
             }
 
+            setScrollTop(scrollTargetTop());
             root.style.scrollBehavior = previousBehavior;
           }
 
