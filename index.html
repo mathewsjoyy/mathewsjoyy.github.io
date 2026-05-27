@@ -576,8 +576,7 @@
         }
 
         function scrollTargetTop() {
-          var scrollMargin = parseFloat(getComputedStyle(target).scrollMarginTop) || 0;
-          return target.getBoundingClientRect().top + getScrollTop() - scrollMargin;
+          return target.offsetTop;
         }
 
         function animateScrollTo(end) {
