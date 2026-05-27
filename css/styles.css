@@ -24,12 +24,6 @@ body {
   min-height: 100%;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  html {
-    scroll-snap-type: y proximity;
-  }
-}
-
 body {
   font-family: var(--font);
   color: var(--text);
@@ -39,12 +33,17 @@ body {
 
 .hero {
   position: relative;
+  height: 100vh;
   height: 100svh;
-  min-height: 100svh;
   max-height: 100svh;
   overflow: hidden;
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
+}
+
+@supports (height: 100dvh) {
+  .hero {
+    height: 100dvh;
+    max-height: 100dvh;
+  }
 }
 
 /* —— Background stack —— */
@@ -409,14 +408,12 @@ html.use-tw-animate .tech-band:not(.tech-band--visible) {
 .journey {
   position: relative;
   background: var(--journey-bg);
-  padding: clamp(3rem, 8vh, 5rem) 0 clamp(2.5rem, 6vh, 4rem);
-  border-top: 1px solid rgba(245, 245, 245, 0.06);
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
+  padding: 0 0 clamp(2.5rem, 6vh, 4rem);
+  scroll-margin-top: 0;
 }
 
 .journey__header {
-  padding: 0 var(--space) clamp(1.75rem, 4vh, 2.5rem);
+  padding: var(--space) var(--space) clamp(1.75rem, 4vh, 2.5rem);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -453,33 +450,23 @@ html.use-tw-animate .tech-band:not(.tech-band--visible) {
 }
 
 .journey__track-shell {
-  width: 100%;
-  padding: 0 var(--space);
-  box-sizing: border-box;
+  padding: 0 var(--space) clamp(0.5rem, 1.5vh, 1rem);
+  text-align: center;
 }
 
 .journey__track {
-  display: flex;
-  justify-content: safe center;
+  display: inline-flex;
+  vertical-align: top;
+  justify-content: center;
   gap: clamp(0.85rem, 2vw, 1.25rem);
-  width: 100%;
+  max-width: 100%;
   overflow-x: auto;
   overscroll-behavior-x: contain;
   scroll-snap-type: x mandatory;
   scroll-padding-inline: var(--space);
-  padding: 0 0 clamp(0.5rem, 1.5vh, 1rem);
   -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
   scrollbar-color: rgba(245, 245, 245, 0.22) transparent;
-}
-
-@supports not (justify-content: safe center) {
-  .journey__track {
-    justify-content: flex-start;
-    width: fit-content;
-    max-width: 100%;
-    margin-inline: auto;
-  }
 }
 
 .journey__track:focus-visible {
@@ -498,7 +485,8 @@ html.use-tw-animate .tech-band:not(.tech-band--visible) {
 
 .journey-card {
   position: relative;
-  flex: 0 0 clamp(16.5rem, 28vw, 20.5rem);
+  flex: 0 0 18.5rem;
+  width: 18.5rem;
   aspect-ratio: 3 / 4.15;
   scroll-snap-align: start;
   border-radius: 4px;
@@ -685,13 +673,14 @@ a.journey__link:focus-visible {
     align-self: start;
     max-width: 40ch;
   }
+
+  .journey-card {
+    flex-basis: clamp(16.5rem, 78vw, 18.5rem);
+    width: clamp(16.5rem, 78vw, 18.5rem);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-snap-type: none;
-  }
-
   .hero__grain {
     opacity: 0.32;
   }

@@ -578,9 +578,7 @@
         }
 
         function scrollTargetTop() {
-          var hero = document.querySelector(".hero");
-          if (hero) return hero.offsetHeight;
-          return target.offsetTop;
+          return Math.round(target.offsetTop);
         }
 
         function animateScrollTo(end) {
