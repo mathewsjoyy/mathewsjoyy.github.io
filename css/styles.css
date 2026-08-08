@@ -65,6 +65,34 @@ body {
   /* Avoid soft scaling / layer compositing blur in some browsers */
   transform: translateZ(0);
   backface-visibility: hidden;
+  transition: opacity 0.6s ease;
+}
+
+/*
+ * Colour dither layer (js/dither.js). The canvas backing store is small —
+ * roughly viewport / 2 — and CSS blows it up with nearest-neighbour, so the
+ * chunky pixels are the point rather than an artefact.
+ */
+.hero__dither {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  image-rendering: crisp-edges; /* older Firefox fallback */
+  image-rendering: pixelated; /* wins where supported */
+  transition: opacity 0.9s ease;
+}
+
+.hero__dither.is-live {
+  opacity: 1;
+}
+
+/* Once the dither is painting, the source photo is only a colour reference */
+html.dither-live .hero__photo {
+  opacity: 0;
 }
 
 /*
@@ -82,18 +110,41 @@ body {
   background-color: transparent;
   mix-blend-mode: overlay;
   opacity: 0.38;
+  transition: opacity 0.9s ease;
+}
+
+/* The dither supplies its own texture — heavy grain just softens the grid */
+html.dither-live .hero__grain {
+  opacity: 0.1;
+}
+
+/*
+ * A dithered background has few flat areas for type to sit against, so the
+ * scrim knocks the image back exactly where the copy lands while leaving the
+ * dot texture readable.
+ */
+.hero__scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background:
+    linear-gradient(to right, rgba(3, 5, 8, 0.8) 0%, rgba(3, 5, 8, 0) 40%),
+    linear-gradient(to left, rgba(3, 5, 8, 0.84) 0%, rgba(3, 5, 8, 0.28) 26%, rgba(3, 5, 8, 0) 48%),
+    linear-gradient(to top, rgba(3, 5, 8, 0.66) 0%, rgba(3, 5, 8, 0) 30%),
+    rgba(3, 5, 8, 0.1);
 }
 
 .hero__vignette {
   position: absolute;
   inset: 0;
-  z-index: 3;
+  z-index: 4;
   pointer-events: none;
   background: radial-gradient(
     ellipse 90% 75% at 50% 45%,
     transparent 0%,
-    transparent 45%,
-    rgba(0, 0, 0, 0.55) 100%
+    transparent 42%,
+    rgba(0, 0, 0, 0.6) 100%
   );
 }
 
@@ -112,7 +163,7 @@ body {
 
 .hero__content {
   position: relative;
-  z-index: 4;
+  z-index: 5;
   height: 100%;
   min-height: 0;
   padding: var(--space);
@@ -330,13 +381,16 @@ html.use-tw-animate .tech-band:not(.tech-band--visible) {
   height: auto;
   aspect-ratio: 1;
   object-fit: contain;
-  filter: grayscale(1) brightness(0) invert(1) opacity(0.38);
+  /* Drop shadow keeps the mono glyphs off the dithered field behind them */
+  filter: grayscale(1) brightness(0) invert(1) opacity(0.6)
+    drop-shadow(0 1px 3px rgba(0, 0, 0, 0.9));
   transition: filter 0.25s ease, opacity 0.25s ease;
 }
 
 .tech-band__link:hover .tech-band__logo,
 .tech-band__link:focus-visible .tech-band__logo {
-  filter: grayscale(1) brightness(0) invert(1) opacity(0.62);
+  filter: grayscale(1) brightness(0) invert(1) opacity(0.92)
+    drop-shadow(0 1px 3px rgba(0, 0, 0, 0.9));
 }
 
 .hero__scroll {
@@ -460,7 +514,12 @@ html.use-tw-animate .tech-band:not(.tech-band--visible) {
 .journey__track {
   display: inline-flex;
   vertical-align: top;
-  justify-content: center;
+  /* This element is the scroll container, so plain `center` is a trap: once the
+     cards overflow, centring pushes half the overflow off the leading edge where
+     scrollLeft can never reach it, hiding card 01 outright. `safe` falls back to
+     start alignment exactly when that would happen. Where the cards do fit, the
+     inline-flex box shrink-wraps and the shell's text-align centres it anyway. */
+  justify-content: safe center;
   gap: clamp(0.85rem, 2vw, 1.25rem);
   max-width: 100%;
   overflow-x: auto;
@@ -681,6 +740,21 @@ a.journey__link:focus-visible {
   .journey-card {
     flex-basis: clamp(16.5rem, 78vw, 18.5rem);
     width: clamp(16.5rem, 78vw, 18.5rem);
+  }
+
+  /* Single column stacks everything at the top, so the scrim has to fall
+     top-down rather than in from the sides. */
+  .hero__scrim {
+    background:
+      linear-gradient(
+        to bottom,
+        rgba(3, 5, 8, 0.9) 0%,
+        rgba(3, 5, 8, 0.76) 40%,
+        rgba(3, 5, 8, 0.22) 66%,
+        rgba(3, 5, 8, 0) 84%
+      ),
+      linear-gradient(to top, rgba(3, 5, 8, 0.68) 0%, rgba(3, 5, 8, 0) 22%),
+      rgba(3, 5, 8, 0.1);
   }
 }
 
