@@ -1,15 +1,17 @@
-/* Freddie-inspired hero — Mathews Joy portfolio */
+/* Two-ink print look, after the Love Machines cover — Mathews Joy portfolio */
 
 :root {
   --space: clamp(1.25rem, 4vw, 3rem);
-  --text: #f5f5f5;
-  --text-muted: rgba(245, 245, 245, 0.72);
-  /* Sharp stipple: high baseFrequency + single octave (no soft “cloud” scales) */
-  --grain-svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cfilter id='n' color-interpolation-filters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='2.35' numOctaves='1' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  --font: "Inter", system-ui, -apple-system, sans-serif;
-  --font-serif: "Lora", Georgia, "Times New Roman", serif;
-  --journey-bg: #070809;
-  --card-bg: #0e1218;
+  --paper: #ece4d3;
+  --ink: #000;
+  /* Cover's own grey (#8c8a85) is 2.7:1 on paper; this one passes AA for body */
+  --grey: #5e5c57;
+  /* 3.4:1 on paper: large text and image ink only */
+  --magenta: #e6198c;
+  /* 5.5:1 on paper: small pink text, links, focus */
+  --magenta-deep: #b0005f;
+  --font: "Instrument Sans", system-ui, -apple-system, sans-serif;
+  --font-pixel: "Pixelify Sans", "Instrument Sans", monospace;
 }
 
 *,
@@ -24,33 +26,101 @@ body {
   min-height: 100%;
 }
 
+/* Everything is rem-based, so this scales the whole page up on big monitors.
+   The 100% floor holds until ~2000px wide, so phones and laptops are untouched. */
+html {
+  font-size: clamp(100%, 0.25rem + 0.6vw, 125%);
+}
+
 body {
   font-family: var(--font);
-  color: var(--text);
-  background: #050505;
+  color: var(--ink);
+  background: var(--paper);
   -webkit-font-smoothing: antialiased;
 }
 
-.hero {
+/* —— Hero: name, image band, then bio + taglines, like the cover —— */
+@keyframes heroContentIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero__content {
+  min-height: 100svh;
+  padding: var(--space);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    "name name"
+    "visual visual"
+    "bio aside";
+  column-gap: var(--space);
+  align-content: start;
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html.js-ready .hero__content {
+    opacity: 0;
+    animation: heroContentIn 0.72s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+}
+
+.hero__name {
+  grid-area: name;
   position: relative;
-  height: 100vh;
-  height: 100svh;
-  max-height: 100svh;
-  overflow: hidden;
+  z-index: 1;
+  /* Pulls the baseline into the band's striped edge, where the cover's title bleeds */
+  margin: 0 0 -0.12em;
+  font-family: var(--font-pixel);
+  font-size: clamp(3.5rem, min(13vw, 19svh), 16rem);
+  font-weight: 400;
+  line-height: 0.9;
+  letter-spacing: -0.01em;
 }
 
-/* —— Background stack —— */
+.hero__word {
+  white-space: nowrap;
+}
+
+.hero__letter {
+  display: inline-block;
+  transition:
+    color 0.25s ease,
+    transform 0.35s ease;
+}
+
+.hero__letter:hover {
+  color: var(--magenta);
+  transform: translateY(-0.04em);
+}
+
+/*
+ * The band has a fixed height rather than taking the leftover row space: the
+ * bio below types itself in, and a flexible band would shrink as it grew.
+ */
 .hero__visual {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  background: radial-gradient(ellipse 120% 80% at 40% 30%, #1a1f28 0%, #050508 55%, #020203 100%);
-}
-
-.hero__bg {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
+  grid-area: visual;
+  position: relative;
+  height: clamp(14rem, 40svh, 48rem);
+  margin: 0 calc(var(--space) * -1) clamp(1.5rem, 4vh, 2.5rem);
+  overflow: hidden;
+  /* Ink under the photo, so it reads as pink before the dither lands */
+  background: var(--magenta);
+  /* Top edge breaks into scan-lines, solid below */
+  -webkit-mask:
+    repeating-linear-gradient(to bottom, #000 0 3px, transparent 3px 6px) top / 100% 2.5rem no-repeat,
+    linear-gradient(#000 0 0) bottom / 100% calc(100% - 2.5rem) no-repeat;
+  mask:
+    repeating-linear-gradient(to bottom, #000 0 3px, transparent 3px 6px) top / 100% 2.5rem no-repeat,
+    linear-gradient(#000 0 0) bottom / 100% calc(100% - 2.5rem) no-repeat;
 }
 
 .hero__photo {
@@ -59,18 +129,17 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center;
+  /* y must match FOCUS_Y in js/dither.js */
+  object-position: 50% 80%;
   display: block;
-  background: #0a0c10;
-  /* Avoid soft scaling / layer compositing blur in some browsers */
-  transform: translateZ(0);
-  backface-visibility: hidden;
+  /* No-JS / pre-dither fallback: the photo's tones in the magenta ink */
+  mix-blend-mode: luminosity;
   transition: opacity 0.6s ease;
 }
 
 /*
- * Colour dither layer (js/dither.js). The canvas backing store is small —
- * roughly viewport / 2 — and CSS blows it up with nearest-neighbour, so the
+ * Duotone dither layer (js/dither.js). The canvas backing store is small —
+ * roughly band size / 2 — and CSS blows it up with nearest-neighbour, so the
  * chunky pixels are the point rather than an artefact.
  */
 .hero__dither {
@@ -90,167 +159,42 @@ body {
   opacity: 1;
 }
 
-/* Once the dither is painting, the source photo is only a colour reference */
 html.dither-live .hero__photo {
   opacity: 0;
 }
 
-/*
- * Film-style stipple only: single high-frequency noise tile, overlay blend.
- * No chroma / blur filters on the photo — sharp detail stays intact.
- */
-.hero__grain {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  pointer-events: none;
-  background-image: var(--grain-svg);
-  background-size: 128px 128px;
-  background-repeat: repeat;
-  background-color: transparent;
-  mix-blend-mode: overlay;
-  opacity: 0.38;
-  transition: opacity 0.9s ease;
-}
-
-/* The dither supplies its own texture — heavy grain just softens the grid */
-html.dither-live .hero__grain {
-  opacity: 0.1;
-}
-
-/*
- * A dithered background has few flat areas for type to sit against, so the
- * scrim knocks the image back exactly where the copy lands while leaving the
- * dot texture readable.
- */
-.hero__scrim {
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-  pointer-events: none;
-  background:
-    linear-gradient(to right, rgba(3, 5, 8, 0.8) 0%, rgba(3, 5, 8, 0) 40%),
-    linear-gradient(to left, rgba(3, 5, 8, 0.84) 0%, rgba(3, 5, 8, 0.28) 26%, rgba(3, 5, 8, 0) 48%),
-    linear-gradient(to top, rgba(3, 5, 8, 0.66) 0%, rgba(3, 5, 8, 0) 30%),
-    rgba(3, 5, 8, 0.1);
-}
-
-.hero__vignette {
-  position: absolute;
-  inset: 0;
-  z-index: 4;
-  pointer-events: none;
-  background: radial-gradient(
-    ellipse 90% 75% at 50% 45%,
-    transparent 0%,
-    transparent 42%,
-    rgba(0, 0, 0, 0.6) 100%
-  );
-}
-
-/* —— Foreground grid —— */
-@keyframes heroContentIn {
-  from {
-    opacity: 0;
-    transform: translateY(14px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.hero__content {
-  position: relative;
-  z-index: 5;
-  height: 100%;
-  min-height: 0;
-  padding: var(--space);
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, min(40ch, 42vw));
-  grid-template-rows: auto 1fr;
-  gap: clamp(1.5rem, 4vh, 2.5rem);
-  align-items: start;
-  opacity: 1;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  html.js-ready .hero__content {
-    opacity: 0;
-    animation: heroContentIn 0.72s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-  }
-}
-
-.hero__intro {
-  grid-column: 1;
-  grid-row: 1;
-  max-width: 36ch;
-}
-
-.hero__name {
-  margin: 0 0 0.85rem;
-  font-size: clamp(1.75rem, 2.5vw, 2.35rem);
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  line-height: 1.1;
-  text-shadow: 0 1px 24px rgba(0, 0, 0, 0.45);
-}
-
-.hero__name-track {
-  display: inline;
-}
-
-.hero__name-space {
-  pointer-events: none;
-  user-select: none;
-}
-
-.hero__letter {
-  display: inline-block;
-  transition:
-    color 0.35s ease,
-    text-shadow 0.45s cubic-bezier(0.25, 0.85, 0.35, 1),
-    transform 0.35s ease;
-}
-
-.hero__letter:hover {
-  color: #fff;
-  transform: translateY(-0.04em);
-  text-shadow:
-    0 0 8px rgba(255, 255, 255, 0.38),
-    0 0 20px rgba(255, 255, 255, 0.22),
-    0 0 36px rgba(255, 255, 255, 0.12),
-    0 1px 20px rgba(0, 0, 0, 0.5);
-}
-
-.hero__taglines {
-  margin: 0;
-  font-size: clamp(0.8125rem, 1.1vw, 0.9375rem);
-  font-weight: 400;
-  line-height: 1.55;
-  color: var(--text-muted);
-  letter-spacing: 0.01em;
-  text-shadow: 0 1px 20px rgba(0, 0, 0, 0.5);
-}
-
 .hero__bio {
-  grid-column: 2;
-  grid-row: 2;
-  align-self: center;
-  max-width: 40ch;
+  grid-area: bio;
   display: flex;
   flex-direction: column;
   gap: clamp(1.1rem, 2.5vh, 1.65rem);
 }
 
+/* Measure caps the prose only, so the logo row can use the full column */
 .hero__bio p {
+  max-width: 46ch;
   margin: 0;
-  font-size: clamp(0.875rem, 1.15vw, 1rem);
-  font-weight: 400;
-  line-height: 1.65;
-  color: var(--text);
-  text-shadow: 0 1px 18px rgba(0, 0, 0, 0.55);
+  font-size: clamp(0.95rem, 1.1vw, 1.0625rem);
+  line-height: 1.6;
+  color: var(--grey);
+}
+
+.hero__aside {
+  grid-area: aside;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(1.25rem, 3vh, 2rem);
+}
+
+/* 24px+ so the cover's magenta clears the AA large-text bar */
+.hero__taglines {
+  margin: 0;
+  font-size: clamp(1.5rem, 2.4vw, 2.25rem);
+  font-weight: 500;
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+  color: var(--magenta);
 }
 
 /* Typewriter: hide only once JS opts in to animate */
@@ -267,14 +211,11 @@ html.use-tw-animate .tw-target.tw-reveal {
   opacity: 1;
 }
 
-/* Tool logos: Simple Icons SVGs in /assets/logos (static), mono for dark hero */
+/* Tool logos: Simple Icons SVGs in /assets/logos (static), flattened to ink */
 .tech-band {
-  padding-top: clamp(0.35rem, 1vh, 0.65rem);
-  border-top: 1px solid rgba(245, 245, 245, 0.08);
   transition:
     opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
-    transform 0.9s cubic-bezier(0.22, 1, 0.36, 1),
-    border-color 0.55s ease;
+    transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 html.no-js .tech-band,
@@ -288,14 +229,12 @@ html.use-tw-animate .tech-band:not(.tech-band--visible) {
   opacity: 0;
   transform: translateY(14px);
   pointer-events: none;
-  border-top-color: transparent;
 }
 
 .tech-band.tech-band--visible {
   opacity: 1;
   transform: translateY(0);
   pointer-events: auto;
-  border-top-color: rgba(245, 245, 245, 0.08);
 }
 
 .tech-band.tech-band--visible .tech-band__list li {
@@ -349,10 +288,9 @@ html.use-tw-animate .tech-band:not(.tech-band--visible) {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: flex-start;
-  gap: clamp(0.5rem, 2vw, 1rem);
+  gap: clamp(0.5rem, 1.2vw, 1rem); /* 1.2vw keeps all ten on one row at 1024px */
   list-style: none;
-  margin: 0;
+  margin: 0 0 0 -0.3rem; /* optical: logo padding shouldn't indent the row */
   padding: 0;
 }
 
@@ -361,66 +299,48 @@ html.use-tw-animate .tech-band:not(.tech-band--visible) {
   align-items: center;
   justify-content: center;
   padding: 0.3rem;
-  border-radius: 6px;
-  transition: background-color 0.2s ease;
 }
 
 .tech-band__link:focus-visible {
-  outline: 2px solid rgba(245, 245, 245, 0.55);
-  outline-offset: 3px;
+  outline: 2px solid var(--magenta-deep);
+  outline-offset: 2px;
 }
 
-.tech-band__link:hover {
-  background-color: rgba(255, 255, 255, 0.05);
-}
-
-/* Mono / low-contrast: flatten brand colours to soft light gray */
 .tech-band__logo {
   display: block;
-  width: clamp(1.35rem, 3.2vw, 1.7rem);
+  width: clamp(1.35rem, 3.2vw, 1.6rem);
   height: auto;
   aspect-ratio: 1;
   object-fit: contain;
-  /* Drop shadow keeps the mono glyphs off the dithered field behind them */
-  filter: grayscale(1) brightness(0) invert(1) opacity(0.6)
-    drop-shadow(0 1px 3px rgba(0, 0, 0, 0.9));
-  transition: filter 0.25s ease, opacity 0.25s ease;
+  filter: grayscale(1) brightness(0) opacity(0.7);
+  transition: filter 0.2s ease;
 }
 
 .tech-band__link:hover .tech-band__logo,
 .tech-band__link:focus-visible .tech-band__logo {
-  filter: grayscale(1) brightness(0) invert(1) opacity(0.92)
-    drop-shadow(0 1px 3px rgba(0, 0, 0, 0.9));
+  filter: grayscale(1) brightness(0) opacity(1);
 }
 
 .hero__scroll {
-  position: absolute;
-  left: 50%;
-  bottom: var(--space);
-  z-index: 5;
-  transform: translateX(-50%);
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
-  font-size: clamp(0.65rem, 1.4vw, 0.75rem);
+  font-size: 0.9375rem;
   font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--text-muted);
+  color: var(--ink);
   text-decoration: none;
-  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.5);
-  border-bottom: 1px solid rgba(245, 245, 245, 0.22);
-  padding-bottom: 0.15rem;
+  border-bottom: 1px solid var(--ink);
+  padding-bottom: 0.1rem;
   transition: color 0.2s ease, border-color 0.2s ease;
 }
 
 .hero__scroll:hover {
-  color: var(--text);
-  border-bottom-color: rgba(245, 245, 245, 0.5);
+  color: var(--magenta-deep);
+  border-bottom-color: var(--magenta-deep);
 }
 
 .hero__scroll:focus-visible {
-  outline: 2px solid rgba(245, 245, 245, 0.65);
+  outline: 2px solid var(--magenta-deep);
   outline-offset: 4px;
 }
 
@@ -453,11 +373,27 @@ html.use-tw-animate .tech-band:not(.tech-band--visible) {
 
 /* —— Journey timeline —— */
 .journey {
-  position: relative;
   min-height: 100svh;
   display: flex;
   flex-direction: column;
-  background: var(--journey-bg);
+}
+
+/* Section break: magenta scan-lines thinning out, echoing the hero band's edge */
+.journey::before {
+  content: "";
+  flex: none;
+  height: 25px;
+  background: linear-gradient(
+    to bottom,
+    var(--magenta) 0 6px,
+    transparent 6px 10px,
+    var(--magenta) 10px 14px,
+    transparent 14px 18px,
+    var(--magenta) 18px 20px,
+    transparent 20px 24px,
+    var(--magenta) 24px 25px,
+    transparent 25px
+  );
 }
 
 .journey__panel {
@@ -465,74 +401,56 @@ html.use-tw-animate .tech-band:not(.tech-band--visible) {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 100%;
-  min-height: 0;
+  padding-top: clamp(3rem, 8vh, 5rem);
 }
 
 .journey__header {
-  padding: 0 var(--space) clamp(3.5rem, 7vh, 5rem);
+  padding: 0 var(--space) clamp(2.5rem, 6vh, 4rem);
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-}
-
-.journey__eyebrow {
-  margin: 0 0 0.65rem;
-  font-size: clamp(0.65rem, 1.4vw, 0.75rem);
-  font-weight: 500;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--text-muted);
+  text-wrap: balance;
 }
 
 .journey__heading {
-  margin: 0 0 0.85rem;
-  max-width: min(38rem, 100%);
-  font-family: var(--font-serif);
-  font-size: clamp(1.5rem, 3.2vw, 2.35rem);
+  margin: 0 0 1rem;
+  font-family: var(--font-pixel);
+  font-size: clamp(2rem, 4.6vw, 3.75rem);
   font-weight: 400;
-  line-height: 1.28;
-  letter-spacing: 0.01em;
-  color: rgba(245, 245, 245, 0.94);
-  text-wrap: balance;
+  line-height: 1;
+  letter-spacing: -0.01em;
 }
 
 .journey__lede {
   margin: 0;
   max-width: 52ch;
-  font-size: clamp(0.875rem, 1.15vw, 1rem);
-  line-height: 1.65;
-  color: var(--text-muted);
+  font-size: clamp(0.95rem, 1.1vw, 1.0625rem);
+  line-height: 1.6;
+  color: var(--grey);
 }
 
 .journey__track-shell {
   padding: 0 var(--space) clamp(0.5rem, 1.5vh, 1rem);
-  text-align: center;
 }
 
 .journey__track {
-  display: inline-flex;
-  vertical-align: top;
-  /* This element is the scroll container, so plain `center` is a trap: once the
-     cards overflow, centring pushes half the overflow off the leading edge where
-     scrollLeft can never reach it, hiding card 01 outright. `safe` falls back to
-     start alignment exactly when that would happen. Where the cards do fit, the
-     inline-flex box shrink-wraps and the shell's text-align centres it anyway. */
+  display: flex;
+  /* `safe` drops to start alignment once the cards overflow; plain `center`
+     would push card 01 off the leading edge where scrolling can't reach it */
   justify-content: safe center;
   gap: clamp(0.85rem, 2vw, 1.25rem);
-  max-width: 100%;
   overflow-x: auto;
   overscroll-behavior-x: contain;
   scroll-snap-type: x mandatory;
   scroll-padding-inline: var(--space);
   -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
-  scrollbar-color: rgba(245, 245, 245, 0.22) transparent;
+  scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
 }
 
 .journey__track:focus-visible {
-  outline: 2px solid rgba(245, 245, 245, 0.45);
+  outline: 2px solid var(--magenta-deep);
   outline-offset: 4px;
 }
 
@@ -541,106 +459,59 @@ html.use-tw-animate .tech-band:not(.tech-band--visible) {
 }
 
 .journey__track::-webkit-scrollbar-thumb {
-  background: rgba(245, 245, 245, 0.18);
-  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.3);
 }
 
+/* Cards give up a little width so all four fit on ~1200px laptops instead of clipping */
 .journey-card {
-  position: relative;
-  flex: 0 0 18.5rem;
-  width: 18.5rem;
+  flex: 0 1 18.5rem;
+  min-width: 16rem;
   aspect-ratio: 3 / 4.15;
   scroll-snap-align: start;
-  border-radius: 4px;
-  overflow: hidden;
-  background: var(--card-bg);
-  border: 1px solid rgba(245, 245, 245, 0.07);
-  transition: border-color 0.35s ease;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--ink);
 }
 
-.journey-card:hover,
-.journey-card:focus-within {
-  border-color: rgba(245, 245, 245, 0.16);
-}
-
+/* SVG is out of flow so its viewBox height can't stretch the card past its aspect ratio */
 .journey-card__visual {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  overflow: hidden;
-  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 52%, rgba(0, 0, 0, 0.45) 72%, transparent 88%);
-  mask-image: linear-gradient(180deg, #000 0%, #000 52%, rgba(0, 0, 0, 0.45) 72%, transparent 88%);
+  position: relative;
+  flex: 1 1 0;
+  min-height: 0;
 }
 
 .journey-card__visual svg {
-  display: block;
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
-  transform: scale(1.12);
-  transform-origin: 50% 42%;
-  filter: saturate(1.12) brightness(1.08);
-}
-
-.journey-card__grain {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  background-image: var(--grain-svg);
-  background-size: 128px 128px;
-  background-repeat: repeat;
-  mix-blend-mode: overlay;
-  opacity: 0.34;
-}
-
-.journey-card__scrim {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  pointer-events: none;
-  background: linear-gradient(
-    180deg,
-    rgba(7, 8, 9, 0.04) 0%,
-    rgba(7, 8, 9, 0.1) 40%,
-    rgba(7, 8, 9, 0.62) 58%,
-    rgba(7, 8, 9, 0.9) 82%,
-    rgba(7, 8, 9, 0.97) 100%
-  );
 }
 
 .journey-card__body {
-  position: absolute;
-  inset: auto 0 0 0;
-  z-index: 3;
+  flex: none;
   padding: clamp(1rem, 2.5vw, 1.35rem);
 }
 
 .journey-card__phase {
-  margin: 0 0 0.35rem;
-  font-size: 0.6875rem;
+  margin: 0 0 0.3rem;
+  font-size: 0.8125rem;
   font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: rgba(245, 245, 245, 0.55);
+  color: var(--magenta-deep);
 }
 
 .journey-card__title {
-  margin: 0 0 0.55rem;
-  font-family: var(--font-serif);
-  font-size: clamp(1.35rem, 2.4vw, 1.65rem);
-  font-weight: 400;
-  line-height: 1.22;
-  letter-spacing: 0.015em;
-  color: rgba(245, 245, 245, 0.92);
-  text-shadow: 0 1px 14px rgba(0, 0, 0, 0.5);
+  margin: 0 0 0.5rem;
+  font-size: clamp(1.25rem, 2vw, 1.4rem);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
 }
 
 .journey-card__detail {
   margin: 0 0 0.85rem;
-  font-size: clamp(0.78rem, 1vw, 0.875rem);
+  font-size: 0.875rem;
   line-height: 1.55;
-  color: rgba(245, 245, 245, 0.82);
-  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.45);
+  color: var(--grey);
 }
 
 .journey-card__tags {
@@ -653,116 +524,94 @@ html.use-tw-animate .tech-band:not(.tech-band--visible) {
 }
 
 .journey-card__tags li {
-  font-size: 0.6875rem;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: rgba(245, 245, 245, 0.62);
-  padding: 0.22rem 0.45rem;
-  border: 1px solid rgba(245, 245, 245, 0.12);
-  border-radius: 2px;
-}
-
-.journey-card--foundations {
-  box-shadow: inset 0 -80px 80px -40px rgba(61, 139, 122, 0.16);
-}
-
-.journey-card--data {
-  box-shadow: inset 0 -80px 80px -40px rgba(201, 162, 39, 0.16);
-}
-
-.journey-card--vision {
-  box-shadow: inset 0 -80px 80px -40px rgba(74, 127, 212, 0.18);
-}
-
-.journey-card--production {
-  box-shadow: inset 0 -80px 80px -40px rgba(212, 100, 74, 0.18);
+  font-size: 0.75rem;
+  color: var(--magenta-deep);
+  padding: 0.18rem 0.45rem;
+  border: 1px solid var(--magenta);
 }
 
 .journey__footer {
   flex-shrink: 0;
-  padding: clamp(1.25rem, 2.5vh, 1.75rem) var(--space) clamp(1.25rem, 3vh, 2rem);
+  padding: clamp(1.5rem, 3vh, 2rem) var(--space);
 }
 
 .journey__footer p {
   margin: 0;
-  font-size: clamp(0.65rem, 1.5vw, 0.75rem);
-  font-weight: 400;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--text-muted);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem 1.5rem;
+  font-size: 0.875rem;
+  color: var(--grey);
 }
 
 a.journey__link:any-link {
-  color: var(--text-muted);
+  color: var(--magenta-deep);
   text-decoration: none;
-  border-bottom: 1px solid rgba(245, 245, 245, 0.28);
-  transition: color 0.2s ease, border-color 0.2s ease;
+  border-bottom: 1px solid currentColor;
 }
 
 a.journey__link:hover {
-  color: var(--text);
-  border-bottom-color: rgba(245, 245, 245, 0.55);
+  color: var(--ink);
 }
 
 a.journey__link:focus-visible {
-  outline: 2px solid rgba(245, 245, 245, 0.65);
+  outline: 2px solid var(--magenta-deep);
   outline-offset: 3px;
 }
 
 /* —— Responsive —— */
 @media (max-width: 768px) {
-  .hero {
-    height: auto;
-    min-height: 100svh;
-    max-height: none;
-  }
-
+  /* Aside dissolves so the scroll cue can drop below the bio */
   .hero__content {
-    height: auto;
-    min-height: 100svh;
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto;
-    align-content: start;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "name"
+      "visual"
+      "tag"
+      "bio"
+      "scroll";
+    row-gap: 1.5rem;
   }
 
-  .hero__intro {
-    grid-column: 1;
-    grid-row: 1;
+  .hero__name {
+    /* "Mathews" sets at ~4.5em wide in Pixelify; 18vw keeps it inside a 390px screen */
+    font-size: clamp(3.5rem, 18vw, 7rem);
   }
 
-  .hero__bio {
-    grid-column: 1;
-    grid-row: 2;
-    align-self: start;
-    max-width: 40ch;
+  .hero__visual {
+    margin-bottom: 0;
+  }
+
+  .hero__aside {
+    display: contents;
+  }
+
+  .hero__taglines {
+    grid-area: tag;
+  }
+
+  .hero__scroll {
+    grid-area: scroll;
+    justify-self: start;
   }
 
   .journey-card {
-    flex-basis: clamp(16.5rem, 78vw, 18.5rem);
-    width: clamp(16.5rem, 78vw, 18.5rem);
+    flex: 0 0 clamp(16.5rem, 78vw, 18.5rem);
   }
+}
 
-  /* Single column stacks everything at the top, so the scrim has to fall
-     top-down rather than in from the sides. */
-  .hero__scrim {
-    background:
-      linear-gradient(
-        to bottom,
-        rgba(3, 5, 8, 0.9) 0%,
-        rgba(3, 5, 8, 0.76) 40%,
-        rgba(3, 5, 8, 0.22) 66%,
-        rgba(3, 5, 8, 0) 84%
-      ),
-      linear-gradient(to top, rgba(3, 5, 8, 0.68) 0%, rgba(3, 5, 8, 0) 22%),
-      rgba(3, 5, 8, 0.1);
+/* Ten logos don't fit one phone row; two even rows of five beat an 8 + 2 orphan */
+@media (max-width: 480px) {
+  .tech-band__list {
+    display: grid;
+    grid-template-columns: repeat(5, max-content);
+    justify-content: space-between;
+    max-width: 18rem;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero__grain {
-    opacity: 0.32;
-  }
-
   .hero__content {
     animation: none;
     opacity: 1;

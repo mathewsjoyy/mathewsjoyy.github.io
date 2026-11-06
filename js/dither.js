@@ -1,9 +1,10 @@
 /*
- * Hero background: animated colour ordered (Bayer) dither, disturbed by the
- * cursor like the surface of water.
+ * Hero band: animated duotone ordered (Bayer) dither, disturbed by the cursor
+ * like the surface of water.
  *
- * The source photo is drawn into a deliberately small canvas, each RGB channel
- * is quantised against an 8x8 Bayer matrix, then CSS upscales the result with
+ * The source photo is drawn into a deliberately small canvas, its luminance is
+ * quantised against an 8x8 Bayer matrix onto a short ramp of magenta inks (a
+ * two-colour print look: shadows carry the most ink), then CSS upscales it with
  * `image-rendering: pixelated`. The matrix is fixed in screen space while the
  * photo drifts very slowly underneath it, so the dot pattern reorganises over
  * time without ever boiling.
@@ -22,28 +23,36 @@
 
   /* —— Tuning —————————————————————————————————————————————
    * PIXEL     size of one dither cell in CSS px (bigger = chunkier)
-   * LEVELS    quantisation steps *per channel*. 2 = harsh 1-bit-per-channel;
-   *           4 gives 64 colours and a much gentler flicker, because a cell
-   *           flipping moves only 1/3 of the range instead of all of it.
+   * PALETTE   ink ramp, darkest first; luminance level n paints PALETTE[n].
+   *           More entries = gentler flicker, since a cell flipping then moves
+   *           a smaller share of the range.
    * SPREAD    dither strength; 1 = full ordered dither, <1 = flatter
-   * SAT       colour saturation; 1 = as shot, >1 pushes the aurora greens
-   * GAMMA     <1 lifts shadows (this is a night scene)
+   * GAMMA     <1 lifts shadows. This is a night scene, so it is lifted hard,
+   *           otherwise the whole sky lands on the darkest ink as one slab.
    * CONTRAST  applied around mid-grey after gamma
    * EXPOSURE  flat additive lift, post-contrast
    * KNEE/CEIL highlight compression, so bright areas keep dot texture
+   * FOCUS_Y   vertical framing of the photo, 0 = top, 1 = bottom. Must match
+   *           the object-position y on .hero__photo so the fallback frames alike.
    * DRIFT     overall multiplier on the pan/zoom motion. Lower = calmer.
    *           Set to 0 for a completely still image.
    * FPS       idle render cap; the drift is slow enough that this can stay low
    */
   var PIXEL = 2;
-  var LEVELS = 4;
+  var PALETTE = [
+    [158, 0, 88], //   #9E0058
+    [230, 25, 140], // #E6198C
+    [236, 111, 176], // #EC6FB0
+    [246, 196, 222], // #F6C4DE
+  ];
+  var LEVELS = PALETTE.length;
   var SPREAD = 1;
-  var SAT = 1.3;
-  var GAMMA = 0.86;
-  var CONTRAST = 1.02;
-  var EXPOSURE = -0.05;
-  var KNEE = 0.72;
-  var CEIL = 0.94;
+  var GAMMA = 0.6;
+  var CONTRAST = 1.05;
+  var EXPOSURE = 0.08;
+  var KNEE = 0.8;
+  var CEIL = 0.96;
+  var FOCUS_Y = 0.8;
   var DRIFT = 0.3;
   var FPS = 15;
   var MAX_BUFFER_W = 900;
@@ -129,26 +138,23 @@
   }
 
   var q = LEVELS - 1;
-  var step = 255 / q;
 
   /* —— Tone curve ——
-   * Graded on luminance only, then applied to RGB as a single gain, so the
-   * curve changes tone without skewing hue. Both tables are pre-multiplied
-   * into quantisation units so the inner loop is lookups and multiplies.
-   *
-   *   greyQ[l] : graded luminance of an input luma l, in 0..q
-   *   gainQ[l] : multiplier turning a raw 0..255 channel into 0..q, graded
+   * greyQ[l] is the graded luminance of input luma l, pre-scaled into 0..q so
+   * the inner loop is a lookup, an add and a round.
    */
   var greyQ = new Float32Array(256);
-  var gainQ = new Float32Array(256);
   for (var l = 0; l < 256; l++) {
     var v = Math.pow(l / 255, GAMMA);
     v = (v - 0.5) * CONTRAST + 0.5 + EXPOSURE;
     if (v > KNEE) v = KNEE + ((v - KNEE) * (CEIL - KNEE)) / (1 - KNEE);
     v = v < 0 ? 0 : v > 1 ? 1 : v;
     greyQ[l] = v * q;
-    gainQ[l] = l === 0 ? 0 : (v / (l / 255)) * (q / 255);
   }
+
+  // Flattened so the pixel loop reads three bytes without touching nested arrays.
+  var inks = new Uint8Array(LEVELS * 3);
+  for (var p = 0; p < LEVELS; p++) inks.set(PALETTE[p], p * 3);
 
   var bufW = 0;
   var bufH = 0;
@@ -234,7 +240,9 @@
     var sw = bufW / cover / zoom;
     var sh = bufH / cover / zoom;
     var sx = (iw - sw) / 2 + Math.sin(seconds * 0.017) * sw * 0.018 * DRIFT;
-    var sy = (ih - sh) / 2 + Math.cos(seconds * 0.013) * sh * 0.014 * DRIFT;
+    var sy = (ih - sh) * FOCUS_Y + Math.cos(seconds * 0.013) * sh * 0.014 * DRIFT;
+    // The drift can push past the photo's bottom edge when FOCUS_Y is near 1.
+    sy = Math.max(0, Math.min(ih - sh, sy));
 
     ctx.drawImage(photo, sx, sy, sw, sh, 0, 0, bufW, bufH);
     return true;
@@ -424,22 +432,14 @@
 
         // Integer Rec.709 luma: (77R + 150G + 29B) >> 8
         var luma = (r * 77 + g * 150 + b * 29) >> 8;
-        var grey = greyQ[luma];
-        var gain = gainQ[luma];
-        var t = thresholds[row + (x & 7)];
 
-        // Grade (hue-preserving), pull away from grey by SAT, then quantise.
-        var cv = grey + (r * gain - grey) * SAT + t;
-        cv = cv < 0 ? 0 : cv > q ? q : (cv + 0.5) | 0;
-        d[i] = cv * step;
-
-        cv = grey + (g * gain - grey) * SAT + t;
-        cv = cv < 0 ? 0 : cv > q ? q : (cv + 0.5) | 0;
-        d[i + 1] = cv * step;
-
-        cv = grey + (b * gain - grey) * SAT + t;
-        cv = cv < 0 ? 0 : cv > q ? q : (cv + 0.5) | 0;
-        d[i + 2] = cv * step;
+        // Grade, dither, quantise to an ink level, then paint that ink.
+        var lv = greyQ[luma] + thresholds[row + (x & 7)];
+        lv = lv < 0 ? 0 : lv > q ? q : (lv + 0.5) | 0;
+        var k = lv * 3;
+        d[i] = inks[k];
+        d[i + 1] = inks[k + 1];
+        d[i + 2] = inks[k + 2];
       }
     }
     ctx.putImageData(frame, 0, 0);
